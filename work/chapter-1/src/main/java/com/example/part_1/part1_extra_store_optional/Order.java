@@ -1,10 +1,11 @@
 package com.example.part_1.part1_extra_store_optional;
 
-import com.example.annotations.Complexity;
-import com.example.annotations.Optional;
 import rx.Observable;
 
 import java.util.Objects;
+
+import com.example.annotations.Complexity;
+import com.example.annotations.Optional;
 
 import static com.example.annotations.Complexity.Level.MEDIUM;
 
@@ -22,12 +23,9 @@ public class Order {
     @Optional
     @Complexity(MEDIUM)
     public Observable<Long> getTotalPrice() {
-        // TODO: use reduce to find the sum;
-        // TODO: Use ProductCatalog#findById to find corresponded Product by its id
-        // HINT: 3 lines of code
-        // HINT: Observable.from + Observable#map + Observable#reduce
-
-        throw new RuntimeException("Not implemented");
+        return Observable.from(productsIds)
+                .map(ProductsCatalog::findById)
+                .reduce(0l, (val, product) -> val + product.getPrice());
     }
 
     public String getId() {
