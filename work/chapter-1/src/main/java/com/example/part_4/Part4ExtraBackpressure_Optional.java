@@ -1,10 +1,13 @@
 package com.example.part_4;
 
+import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.SignalType;
 
 import java.util.concurrent.CountDownLatch;
 
 import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscription;
 
 import com.example.annotations.Complexity;
 import com.example.annotations.Optional;
@@ -24,13 +27,30 @@ public class Part4ExtraBackpressure_Optional {
     @Optional
     @Complexity(MEDIUM)
     public static void dynamicDemand(Flux<String> source, CountDownLatch countDownOnComplete) {
-        // TODO: provide own implementation of Subscriber. Manage request count manually.
-        // TODO: two times increase request size each time when previous demand has been satisfied
+        source.subscribe(new BaseSubscriber<String>() {
+            int windowSize = 1;
+            int receivedSize = 0;
 
-        // HINT: Consider usage of reactor.core.publisher.BaseSubscriber
-        // HINT: count down onComplete
+            @Override
+            protected void hookOnSubscribe(Subscription subscription) {
+                subscription.request(windowSize);
+            }
 
+            @Override
+            protected void hookOnNext(String value) {
+                receivedSize++;
+                if (receivedSize == windowSize) {
+                    windowSize *= 2;
+                    receivedSize = 0;
+                    upstream().request(windowSize);
+                }
+            }
 
+            @Override
+            protected void hookFinally(SignalType type) {
+                countDownOnComplete.countDown();
+            }
+        });
 
     }
 }
