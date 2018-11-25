@@ -32,8 +32,16 @@ public class Part1ExtraExercises_Optional {
     @Optional
     @Complexity(HARD)
     public static Observable<String> fizzBuzz(Observable<Integer> input) {
-        return input.map(integer -> {
-            return integer.toString();
+        return input.map(o -> {
+            if (o % 15 == 0) {
+                return "FizzBuzz";
+            } else if (o % 3 == 0) {
+                return "Fizz";
+            } else if (o % 5 == 0) {
+                return "Buzz";
+            } else {
+                return String.valueOf(o);
+            }
         });
     }
 
