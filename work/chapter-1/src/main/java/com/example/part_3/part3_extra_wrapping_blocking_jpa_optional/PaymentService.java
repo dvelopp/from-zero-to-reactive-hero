@@ -25,7 +25,7 @@ public class PaymentService {
 	private final PaymentsHistoryReactiveJpaRepository repository;
 
 	public PaymentService() {
-		this.repository = null; // REPLACE
+		this.repository = new ReactivePaymentsHistoryJpaRepositoryAdapter(); // REPLACE
 	}
 
 	public Flux<Payment> findPayments(Flux<String> userIds) {

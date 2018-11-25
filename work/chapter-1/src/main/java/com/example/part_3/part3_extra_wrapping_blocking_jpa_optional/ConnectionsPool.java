@@ -21,6 +21,7 @@ public class ConnectionsPool {
 	}
 
 	public void tryAcquire() {
+		System.out.println("t");
 		connectionsCounter.accumulateAndGet(1, (current, plus) -> {
 			if (current >= size) {
 				throw new IllegalStateException("No available connections in the pool");
@@ -30,6 +31,7 @@ public class ConnectionsPool {
 	}
 
 	public void release() {
+		System.out.println("r");
 		connectionsCounter.decrementAndGet();
 	}
 
