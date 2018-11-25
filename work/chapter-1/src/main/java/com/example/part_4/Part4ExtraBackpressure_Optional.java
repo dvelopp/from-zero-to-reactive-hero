@@ -17,6 +17,13 @@ import static com.example.annotations.Complexity.Level.MEDIUM;
 
 public class Part4ExtraBackpressure_Optional {
 
+    public static void main(String[] args) {
+        Flux<Object> lol = Flux.create(fluxSink -> {
+            fluxSink.next("LOL");
+        });
+        lol.subscribe(System.out::println);
+    }
+
     @Complexity(MEDIUM)
     public static Publisher<String> handleBackpressureWithBuffering(StringEventPublisher stringEventPublisher) {
         return Flux.<String>create(sink -> stringEventPublisher.registerEventListener(sink::next))
