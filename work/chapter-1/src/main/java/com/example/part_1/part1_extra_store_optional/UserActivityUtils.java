@@ -1,9 +1,10 @@
 package com.example.part_1.part1_extra_store_optional;
 
 
+import rx.Observable;
+
 import com.example.annotations.Complexity;
 import com.example.annotations.Optional;
-import rx.Observable;
 
 import static com.example.annotations.Complexity.Level.MEDIUM;
 
@@ -12,8 +13,9 @@ public class UserActivityUtils {
     @Optional
     @Complexity(MEDIUM)
     public static Observable<Product> findMostExpansivePurchase(Observable<Order> ordersHistory) {
-        // TODO: flatten all Products inside Orders and using reduce find one with the highest price
-
-        throw new RuntimeException("Not implemented");
+        return ordersHistory
+                .flatMap(order -> Observable.from(order.getProductsIds()))
+                .map(ProductsCatalog::findById)
+                .reduce(null, (p1, p2) -> p1 != null && p1.getPrice() > p2.getPrice() ? p1 : p2);
     }
 }
