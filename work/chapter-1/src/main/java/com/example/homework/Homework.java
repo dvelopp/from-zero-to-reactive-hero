@@ -1,12 +1,9 @@
 package com.example.homework;
 
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.FluxSink;
 import reactor.test.StepVerifier;
 
 import java.math.BigInteger;
-import java.time.Duration;
-import java.util.function.Consumer;
 
 import org.junit.Test;
 
@@ -18,35 +15,26 @@ import static com.example.annotations.Complexity.Level.MEDIUM;
 public class Homework {
 
     @Complexity(HARD)
-    public static Flux<BigInteger> generate(Long limit) {
-        Consumer<FluxSink<BigInteger>> fluxSinkConsumer = fluxSink -> {
-            for (long i = 0; i < ((limit == null) ? Long.MAX_VALUE : limit); i++) {
-                if (isPrime(i)) {
-                    fluxSink.next(BigInteger.valueOf(i));
+    public static Flux<BigInteger> generate() {
+        return Flux.create(fluxSink -> {
+            for (long i = 1; i < Long.MAX_VALUE && !fluxSink.isCancelled(); i++) {
+                BigInteger val = BigInteger.valueOf(i);
+                if (val.isProbablePrime(1)) {
+                    fluxSink.next(val);
                 }
             }
-        };
-        return Flux.create(fluxSinkConsumer);
-    }
-
-    public static boolean isPrime(long n) {
-        for (int i = 2; 2 * i < n; i++) {
-            if (n % i == 0) {
-                return false;
-            }
-        }
-        return true;
+        });
     }
 
     @Test
     @Complexity(MEDIUM)
     public void testGeneration() {
-        Flux<BigInteger> generate = Homework.generate(10000l);
-        StepVerifier.create(generate)
+        StepVerifier.create(Homework.generate().doOnNext(System.out::println))
                 .expectSubscription()
-                .expectNextMatches(bigInteger -> isPrime(bigInteger.longValue()))
+                .thenRequest(10)
+                .expectNextMatches(bigInteger -> bigInteger.isProbablePrime(1))
                 .thenCancel()
-                .verify(Duration.ofSeconds(1));
+                .verify();
     }
 
 }
