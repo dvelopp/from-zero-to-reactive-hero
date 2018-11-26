@@ -1,12 +1,15 @@
 package com.example.part_8;
 
-import com.example.annotations.Complexity;
-import org.junit.Test;
 import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
 
 import java.time.Duration;
 import java.util.Random;
 import java.util.function.Supplier;
+
+import org.junit.Test;
+
+import com.example.annotations.Complexity;
 
 import static com.example.annotations.Complexity.Level.HARD;
 import static com.example.annotations.Complexity.Level.MEDIUM;
@@ -19,9 +22,12 @@ public class Part8Verification {
         Flux<Integer> toVerify = Flux.fromStream(new Random().ints().boxed())
                 .take(15)
                 .skip(5);
-        //TODO: use StepVerifier to perform testing
 
-        throw new RuntimeException("Not implemented");
+        StepVerifier.create(toVerify)
+                .expectSubscription()
+                .expectNextCount(10)
+                .verifyComplete();
+
     }
 
     @Complexity(HARD)
@@ -31,8 +37,10 @@ public class Part8Verification {
                 .take(15)
                 .skip(5);
 
-        //TODO: use StepVerifier to perform testing
+        StepVerifier.withVirtualTime(toVerify)
+                .thenAwait(Duration.ofDays(15))
+                .expectNextCount(10)
+                .verifyComplete();
 
-        throw new RuntimeException("Not implemented");
     }
 }
