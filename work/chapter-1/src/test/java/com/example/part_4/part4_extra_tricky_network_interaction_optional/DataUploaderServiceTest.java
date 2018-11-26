@@ -32,6 +32,7 @@ public class DataUploaderServiceTest {
 		verifyTimeout(client);
 	}
 
+
 	void verifyOrdered(TrickyHttpClient client) {
 		List<OrderedByteBuffer> recorded = client.getRecordedBuffers();
 
