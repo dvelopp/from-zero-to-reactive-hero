@@ -1,16 +1,14 @@
 package com.example.part_10.service.external;
 
-import com.example.part_10.service.CryptoService;
-import com.example.part_10.service.external.utils.PriceMessageUnpacker;
-import com.example.part_10.service.external.utils.TradeMessageUnpacker;
 import reactor.core.publisher.Flux;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Map;
 
-//TODO turn to multi-subscriber with processor or another similar operator
-//TODO add small history for each subscriber
-//TODO add resilience
+import com.example.part_10.service.CryptoService;
+import com.example.part_10.service.external.utils.PriceMessageUnpacker;
+import com.example.part_10.service.external.utils.TradeMessageUnpacker;
 
 public class CryptoCompareService implements CryptoService {
     public static final int CACHE_SIZE = 3;
@@ -31,14 +29,13 @@ public class CryptoCompareService implements CryptoService {
         return reactiveCryptoListener;
     }
 
-    // TODO: implement resilience such as retry with delay
     public static <T> Flux<T> provideResilience(Flux<T> input) {
-        return input;
+        return input.retryBackoff(100, Duration.ofMillis(100));
     }
 
 
-    // TODO: implement caching of 3 last elements & multi subscribers support
     public static <T> Flux<T> provideCaching(Flux<T> input) {
-        return input;
+        return input.replay(3).autoConnect(0);
     }
+
 }

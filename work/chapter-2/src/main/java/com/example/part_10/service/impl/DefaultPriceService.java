@@ -1,12 +1,17 @@
 package com.example.part_10.service.impl;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.GroupedFlux;
+
+import java.time.Duration;
+import java.util.Map;
+import java.util.logging.Logger;
+
 import com.example.part_10.dto.MessageDTO;
 import com.example.part_10.service.CryptoService;
 import com.example.part_10.service.PriceService;
-import reactor.core.publisher.Flux;
-
-import java.util.Map;
-import java.util.logging.Logger;
+import com.example.part_10.service.utils.MessageMapper;
+import com.example.part_10.service.utils.Sum;
 
 public class DefaultPriceService implements PriceService {
 
@@ -18,12 +23,11 @@ public class DefaultPriceService implements PriceService {
 
     public DefaultPriceService(CryptoService cryptoService) {
         sharedStream = cryptoService.eventsStream()
-                                    .doOnNext(event -> logger.fine("Incoming event: " + event))
-                                    .transform(this::selectOnlyPriceUpdateEvents)
-                                    .transform(this::currentPrice)
-                                    .doOnNext(event -> logger.fine("Price event: " + event));
+                .doOnNext(event -> logger.fine("Incoming event: " + event))
+                .transform(this::selectOnlyPriceUpdateEvents)
+                .transform(this::currentPrice)
+                .doOnNext(event -> logger.fine("Price event: " + event));
     }
-
 
 
     public Flux<MessageDTO<Float>> pricesStream(Flux<Long> intervalPreferencesStream) {
@@ -33,41 +37,52 @@ public class DefaultPriceService implements PriceService {
         ));
     }
 
-    // FIXME:
-    // 1) JUST FOR WARM UP: .map() incoming Map<String, Object> to MessageDTO. For that purpose use MessageDTO.price()
-    //    NOTE: Incoming Map<String, Object> contains keys PRICE_KEY and CURRENCY_KEY
-    //    NOTE: Use MessageMapper utility class for message validation and transformation
-    // Visible for testing
     Flux<Map<String, Object>> selectOnlyPriceUpdateEvents(Flux<Map<String, Object>> input) {
-    	// TODO: filter only Price messages
-	    // TODO: verify that price message are valid
-	    // HINT: take a look at helper MessageMapper
+        return input
+                .filter(MessageMapper::isPriceMessageType)
+                .filter(MessageMapper::isValidPriceMessage);
 
-        return Flux.never();
     }
 
-    // Visible for testing
     Flux<MessageDTO<Float>> currentPrice(Flux<Map<String, Object>> input) {
-    	// TODO map to Statistic message using MessageMapper.mapToPriceMessage
+        return input
+                .map(MessageMapper::mapToPriceMessage);
 
-        return Flux.never();
     }
 
-    // 1.1)   TODO Collect crypto currency price during the interval of seconds
-    //        HINT consider corner case when a client did not send any info about interval (add initial interval (mergeWith(...)))
-    //        HINT use window + switchMap
-    // 1.2)   TODO group collected MessageDTO results by currency
-    //        HINT for reduce consider to reuse Sum.empty and Sum#add
-    // 1.3.2) TODO calculate average for reduced Sum object using Sun#avg
-    // 1.3.3) TODO map to Statistic message using MessageDTO#avg()
-
-    // Visible for testing
-    // TODO: Remove as should be implemented by trainees
     Flux<MessageDTO<Float>> averagePrice(
             Flux<Long> requestedInterval,
-            Flux<MessageDTO<Float>> priceData
-    ) {
-        return Flux.never();
+            Flux<MessageDTO<Float>> priceData) {
+        return requestedInterval.startWith(DEFAULT_AVG_PRICE_INTERVAL)
+                .switchMap(timeInterval -> priceData.window(Duration.ofSeconds(timeInterval)))
+                .flatMap(flux -> {
+                            Flux<GroupedFlux<String, MessageDTO<Float>>> groupedFluxFlux = flux
+                                    .groupBy(MessageDTO::getCurrency);
+                            return groupedFluxFlux
+                                    .flatMap(keyFlux -> keyFlux
+                                            .map(MessageDTO::getData)
+                                            .reduce(Sum.empty(), Sum::add)
+                                            .map(Sum::avg)
+                                            .map(avg -> MessageDTO.avg(avg, keyFlux.key(), "Local Market")));
+                        }
+                );
+
+       /* return requestedInterval
+                .switchMap(val -> {
+                    if (val == null) {
+                        return priceData.window(Duration.ofMillis(DEFAULT_AVG_PRICE_INTERVAL));
+                    } else {
+                        return priceData.window(Duration.ofMillis(val));
+                    }
+                })
+                .flatMap(flux -> flux)
+                .groupBy(MessageDTO::getCurrency)
+                .flatMap(flux -> {
+                    Mono<Sum> reduce = flux.reduce(Sum.empty(), (sum, messageDTO) -> sum.add(messageDTO.getData()));
+                    MessageDTO<Float> mes = MessageDTO.price(reduce.block().avg(), flux.blockFirst().getCurrency(), flux.blockFirst().getMarket());
+                    return Flux.just(mes);
+                });*/
     }
+
 
 }
