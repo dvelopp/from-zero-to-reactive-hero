@@ -4,6 +4,7 @@ import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.Supplier;
 
@@ -39,8 +40,9 @@ public class Part8Verification {
 
         StepVerifier.withVirtualTime(toVerify)
                 .thenAwait(Duration.ofDays(15))
+                .recordWith(ArrayList::new)
                 .expectNextCount(10)
+                .expectRecordedMatches(c -> c.size() == 10)
                 .verifyComplete();
-
     }
 }
