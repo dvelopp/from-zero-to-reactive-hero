@@ -28,9 +28,9 @@ public class Part7Context {
     public static Flux<String> provideCorrectContext(
             Publisher<String> sourceA, Context contextA,
             Publisher<String> sourceB, Context contextB) {
-        return Flux.from(sourceA)
-                .mergeWith(sourceB)
-                .subscriberContext(contextA)
+        return Flux.from(sourceA).subscriberContext(contextA)
+                .mergeWith(Flux.from(sourceB))
                 .subscriberContext(contextB);
+
     }
 }
