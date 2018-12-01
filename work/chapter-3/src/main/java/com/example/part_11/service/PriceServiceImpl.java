@@ -10,10 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.part_11.dto.MessageDTO;
 
-/**
- * Class Description goes here.
- * Created by dmitrypashkov on 12/1/18
- */
 @Service
 public class PriceServiceImpl implements PriceService {
     @Override
