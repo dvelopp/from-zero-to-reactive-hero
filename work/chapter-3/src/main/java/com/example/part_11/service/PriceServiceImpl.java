@@ -12,8 +12,10 @@ import com.example.part_11.dto.MessageDTO;
 
 @Service
 public class PriceServiceImpl implements PriceService {
+
     @Override
     public Flux<MessageDTO<Float>> pricesStream(Flux<Long> intervalPreferencesStream) {
         return null;
     }
+
 }

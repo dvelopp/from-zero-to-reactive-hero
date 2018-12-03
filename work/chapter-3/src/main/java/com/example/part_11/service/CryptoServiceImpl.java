@@ -12,8 +12,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CryptoServiceImpl implements CryptoService {
+
     @Override
     public Flux<Map<String, Object>> eventsStream() {
         return null;
     }
+
 }

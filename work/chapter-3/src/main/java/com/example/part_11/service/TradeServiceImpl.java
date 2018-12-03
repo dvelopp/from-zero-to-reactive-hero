@@ -12,8 +12,10 @@ import com.example.part_11.dto.MessageDTO;
 
 @Component
 public class TradeServiceImpl implements TradeService {
+
     @Override
     public Flux<MessageDTO<MessageDTO.Trade>> tradesStream() {
         return null;
     }
+
 }
