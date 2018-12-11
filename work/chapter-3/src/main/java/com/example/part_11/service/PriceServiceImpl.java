@@ -27,6 +27,8 @@ public class PriceServiceImpl implements PriceService {
 
     @Autowired
     private CryptoService cryptoService;
+    @Autowired
+    private MessageMapper messageMapper;
 
     private Flux<MessageDTO<Float>> sharedStream;
 
@@ -40,13 +42,13 @@ public class PriceServiceImpl implements PriceService {
     }
 
     private Flux<MessageDTO<Float>> currentPrice(Flux<Map<String, Object>> input) {
-        return input.map(MessageMapper::mapToPriceMessage);
+        return input.map(messageMapper::mapToPriceMessage);
     }
 
     private Flux<Map<String, Object>> selectOnlyPriceUpdateEvents(Flux<Map<String, Object>> input) {
         return input
-                .filter(MessageMapper::isPriceMessageType)
-                .filter(MessageMapper::isValidPriceMessage);
+                .filter(messageMapper::isPriceMessageType)
+                .filter(messageMapper::isValidPriceMessage);
     }
 
     @Override

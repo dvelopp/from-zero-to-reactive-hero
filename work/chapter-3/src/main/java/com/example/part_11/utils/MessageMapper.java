@@ -4,13 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bson.Document;
+import org.springframework.stereotype.Component;
 
 import com.example.part_11.domain.Trade;
 import com.example.part_11.dto.MessageDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@Component
 public class MessageMapper {
+
     public static final String TYPE_KEY = "TYPE";
     public static final String TIMESTAMP_KEY = "TIMESTAMP";
     public static final String PRICE_KEY = "PRICE";
@@ -19,7 +22,7 @@ public class MessageMapper {
     public static final String MARKET_KEY = "MARKET";
     public static final String FLAGS_KEY = "FLAGS";
 
-    public static MessageDTO<Float> mapToPriceMessage(Map<String, Object> event) {
+    public MessageDTO<Float> mapToPriceMessage(Map<String, Object> event) {
         return MessageDTO.price(
                 (float) event.get(PRICE_KEY),
                 (String) event.get(CURRENCY_KEY),
@@ -27,7 +30,7 @@ public class MessageMapper {
         );
     }
 
-    public static MessageDTO<MessageDTO.Trade> mapToTradeMessage(Map<String, Object> event) {
+    public MessageDTO<MessageDTO.Trade> mapToTradeMessage(Map<String, Object> event) {
         return MessageDTO.trade(
                 (long) (float) event.get(TIMESTAMP_KEY) * 1000,
                 (float) event.get(PRICE_KEY),
@@ -37,7 +40,7 @@ public class MessageMapper {
         );
     }
 
-    public static Trade mapToDomain(MessageDTO<MessageDTO.Trade> tradeMessageDTO) {
+    public Trade mapToDomain(MessageDTO<MessageDTO.Trade> tradeMessageDTO) {
         Trade trade = new Trade();
 
         trade.setPrice(tradeMessageDTO.getData().getPrice());
@@ -49,7 +52,7 @@ public class MessageMapper {
         return trade;
     }
 
-    public static Document mapToMongoDocument(Trade trade) {
+    public Document mapToMongoDocument(Trade trade) {
         return new Document(
                 new ObjectMapper()
                         .convertValue(trade, new TypeReference<HashMap<String, Object>>() {
@@ -57,18 +60,18 @@ public class MessageMapper {
         );
     }
 
-    public static boolean isPriceMessageType(Map<String, Object> event) {
+    public boolean isPriceMessageType(Map<String, Object> event) {
         return event.containsKey(TYPE_KEY) &&
                 event.get(TYPE_KEY).equals("5");
     }
 
-    public static boolean isValidPriceMessage(Map<String, Object> event) {
+    public boolean isValidPriceMessage(Map<String, Object> event) {
         return event.containsKey(PRICE_KEY) &&
                 event.containsKey(CURRENCY_KEY) &&
                 event.containsKey(MARKET_KEY);
     }
 
-    public static boolean isTradeMessageType(Map<String, Object> event) {
+    public boolean isTradeMessageType(Map<String, Object> event) {
         return event.containsKey(TYPE_KEY) &&
                 event.get(TYPE_KEY).equals("0");
     }
