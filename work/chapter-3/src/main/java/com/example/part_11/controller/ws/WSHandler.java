@@ -4,6 +4,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.socket.WebSocketHandler;
@@ -16,6 +19,8 @@ import com.example.part_11.service.TradeService;
 
 @Service
 public class WSHandler implements WebSocketHandler {
+
+    private static final Logger logger = Logger.getLogger("WSHandler");
 
     @Autowired
     private WebSocketMessageMapper mapper;
@@ -49,8 +54,12 @@ public class WSHandler implements WebSocketHandler {
         return Flux.merge(priceService.pricesStream(input), tradeService.tradesStream());
     }
 
-    Flux<Long> handleRequestedAveragePriceIntervalValue(Flux<String> requestedInterval) {
-        // TODO Port logic from previous example
-        return Flux.never();
+    private Flux<Long> handleRequestedAveragePriceIntervalValue(Flux<String> requestedInterval) {
+        return requestedInterval
+                .map(Long::valueOf)
+                .filter(o -> o > 0 && o < 60)
+                .onErrorContinue((throwable, o) -> logger.log(Level.WARNING, throwable, () -> "Wrong number"));
     }
+
 }
+
