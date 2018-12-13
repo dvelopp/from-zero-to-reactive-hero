@@ -59,10 +59,6 @@ public class PriceServiceImpl implements PriceService {
         ));
     }
 
-    public Flux<MessageDTO<Float>> getSharedStream() {
-        return sharedStream;
-    }
-
     Flux<MessageDTO<Float>> averagePrice(
             Flux<Long> requestedInterval,
             Flux<MessageDTO<Float>> priceData) {
