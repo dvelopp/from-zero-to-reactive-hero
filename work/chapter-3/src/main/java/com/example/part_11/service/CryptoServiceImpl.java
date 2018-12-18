@@ -21,7 +21,8 @@ import static java.util.Arrays.asList;
 @Service
 public class CryptoServiceImpl implements CryptoService {
 
-    public static final int CACHE_SIZE = 3;
+    private static final int CACHE_SIZE = 3;
+    private static final int NUM_RETRIES = 100;
 
     @Autowired
     private CryptoCompareClient client;
@@ -47,7 +48,7 @@ public class CryptoServiceImpl implements CryptoService {
     }
 
     public <T> Flux<T> provideResilience(Flux<T> input) {
-        return input.retryBackoff(100, Duration.ofMillis(100));
+        return input.retryBackoff(NUM_RETRIES, Duration.ofMillis(100));
     }
 
     public <T> Flux<T> provideCaching(Flux<T> input) {

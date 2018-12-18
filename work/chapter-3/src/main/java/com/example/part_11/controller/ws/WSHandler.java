@@ -21,6 +21,7 @@ import com.example.part_11.service.TradeService;
 public class WSHandler implements WebSocketHandler {
 
     private static final Logger logger = Logger.getLogger("WSHandler");
+    private static final String WRONG_NUMBER_MSG = "Wrong number";
 
     @Autowired
     private WebSocketMessageMapper mapper;
@@ -58,7 +59,7 @@ public class WSHandler implements WebSocketHandler {
         return requestedInterval
                 .map(Long::valueOf)
                 .filter(o -> o > 0 && o < 60)
-                .onErrorContinue((throwable, o) -> logger.log(Level.WARNING, throwable, () -> "Wrong number"));
+                .onErrorContinue((throwable, o) -> logger.log(Level.WARNING, throwable, () -> WRONG_NUMBER_MSG));
     }
 
 }

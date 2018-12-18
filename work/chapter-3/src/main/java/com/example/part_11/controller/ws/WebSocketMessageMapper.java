@@ -13,6 +13,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.stereotype.Service;
 
+import static java.util.Collections.emptyMap;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
 @Service
 public class WebSocketMessageMapper {
 
@@ -28,8 +31,8 @@ public class WebSocketMessageMapper {
 						Mono.just(i),
 						dataBufferFactory,
 						ResolvableType.forType(Object.class),
-						MediaType.APPLICATION_JSON,
-						Collections.emptyMap()
+						APPLICATION_JSON,
+						emptyMap()
 				));
 
 	}
