@@ -24,6 +24,7 @@ public class PriceServiceImpl implements PriceService {
 
     private static final Logger logger = Logger.getLogger("price-service");
     private static final long DEFAULT_AVG_PRICE_INTERVAL = 30L;
+    private static final String LOCAL_MARKET = "Local Market";
 
     @Autowired
     private CryptoService cryptoService;
@@ -72,7 +73,7 @@ public class PriceServiceImpl implements PriceService {
                                             .map(MessageDTO::getData)
                                             .reduce(Sum.empty(), Sum::add)
                                             .map(Sum::avg)
-                                            .map(avg -> MessageDTO.avg(avg, keyFlux.key(), "Local Market")));
+                                            .map(avg -> MessageDTO.avg(avg, keyFlux.key(), LOCAL_MARKET)));
                         }
                 );
 
