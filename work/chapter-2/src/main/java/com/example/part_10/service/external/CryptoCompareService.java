@@ -11,7 +11,8 @@ import com.example.part_10.service.external.utils.PriceMessageUnpacker;
 import com.example.part_10.service.external.utils.TradeMessageUnpacker;
 
 public class CryptoCompareService implements CryptoService {
-    public static final int CACHE_SIZE = 3;
+
+    private static final int CACHE_SIZE = 3;
 
     private final Flux<Map<String, Object>> reactiveCryptoListener;
 
@@ -35,7 +36,7 @@ public class CryptoCompareService implements CryptoService {
 
 
     public static <T> Flux<T> provideCaching(Flux<T> input) {
-        return input.replay(3).autoConnect(0);
+        return input.replay(CACHE_SIZE).autoConnect(0);
     }
 
 }
