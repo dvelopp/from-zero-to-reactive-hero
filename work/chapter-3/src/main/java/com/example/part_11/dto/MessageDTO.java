@@ -3,6 +3,7 @@ package com.example.part_11.dto;
 import java.time.Instant;
 
 public class MessageDTO<T> {
+
     private final long timestamp;
     private final T data;
     private final String currency;
@@ -39,15 +40,27 @@ public class MessageDTO<T> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         MessageDTO<?> that = (MessageDTO<?>) o;
 
-        if (timestamp != that.timestamp) return false;
-        if (!data.equals(that.data)) return false;
-        if (!currency.equals(that.currency)) return false;
-        if (!market.equals(that.market)) return false;
+        if (timestamp != that.timestamp) {
+            return false;
+        }
+        if (!data.equals(that.data)) {
+            return false;
+        }
+        if (!currency.equals(that.currency)) {
+            return false;
+        }
+        if (!market.equals(that.market)) {
+            return false;
+        }
         return type == that.type;
     }
 
@@ -108,12 +121,18 @@ public class MessageDTO<T> {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
 
             Trade trade = (Trade) o;
 
-            if (Float.compare(trade.price, price) != 0) return false;
+            if (Float.compare(trade.price, price) != 0) {
+                return false;
+            }
             return Float.compare(trade.amount, amount) == 0;
         }
 
@@ -124,4 +143,5 @@ public class MessageDTO<T> {
             return result;
         }
     }
+
 }

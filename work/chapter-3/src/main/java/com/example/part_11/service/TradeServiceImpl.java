@@ -8,7 +8,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,6 @@ public class TradeServiceImpl implements TradeService {
     private CryptoService cryptoService;
     @Autowired
     private MessageMapper messageMapper;
-
-    private static final Logger logger = Logger.getLogger("trade-service");
 
     private Flux<MessageDTO<MessageDTO.Trade>> sharedStream;
 

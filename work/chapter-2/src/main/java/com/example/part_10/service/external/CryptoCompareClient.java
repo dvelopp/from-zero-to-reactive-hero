@@ -1,8 +1,5 @@
 package com.example.part_10.service.external;
 
-import com.example.part_10.service.external.utils.MessageUnpacker;
-import io.socket.client.IO;
-import io.socket.client.Socket;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
@@ -11,6 +8,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+
+import com.example.part_10.service.external.utils.MessageUnpacker;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+
+import static io.socket.client.Socket.EVENT_DISCONNECT;
+import static io.socket.client.Socket.EVENT_ERROR;
 
 class CryptoCompareClient {
     private static final Logger logger = Logger.getLogger("external-trading-service");
@@ -57,8 +62,8 @@ class CryptoCompareClient {
                             }
                         }
                     })
-                    .on(Socket.EVENT_ERROR, args -> sink.error((Throwable) args[0]))
-                    .on(Socket.EVENT_DISCONNECT, args -> sink.complete());
+                    .on(EVENT_ERROR, args -> sink.error((Throwable) args[0]))
+                    .on(EVENT_DISCONNECT, args -> sink.complete());
 
             sink.onCancel(closeSocket::run);
             socket.connect();
