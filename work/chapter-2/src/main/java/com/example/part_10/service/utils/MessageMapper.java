@@ -1,13 +1,14 @@
 package com.example.part_10.service.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.bson.Document;
+
 import com.example.part_10.domain.Trade;
 import com.example.part_10.dto.MessageDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.bson.Document;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MessageMapper {
     public static final String TYPE_KEY = "TYPE";
@@ -25,10 +26,10 @@ public class MessageMapper {
                 (String) event.get(MARKET_KEY)
         );
     }
-    
+
     public static MessageDTO<MessageDTO.Trade> mapToTradeMessage(Map<String, Object> event) {
         return MessageDTO.trade(
-                (long)(float) event.get(TIMESTAMP_KEY) * 1000,
+                (long) (float) event.get(TIMESTAMP_KEY) * 1000,
                 (float) event.get(PRICE_KEY),
                 event.get(FLAGS_KEY).equals("1") ? (float) event.get(QUANTITY_KEY) : -(float) event.get(QUANTITY_KEY),
                 (String) event.get(CURRENCY_KEY),
@@ -50,8 +51,9 @@ public class MessageMapper {
 
     public static Document mapToMongoDocument(Trade trade) {
         return new Document(
-            new ObjectMapper()
-                    .convertValue(trade, new TypeReference<HashMap<String, Object>>() {})
+                new ObjectMapper()
+                        .convertValue(trade, new TypeReference<HashMap<String, Object>>() {
+                        })
         );
     }
 

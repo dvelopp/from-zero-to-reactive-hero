@@ -30,11 +30,19 @@ public class Sum {
     }
 
     public boolean equals(Object o) {
-        if (o == this) return true;
-        if (!(o instanceof Sum)) return false;
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Sum)) {
+            return false;
+        }
         final Sum other = (Sum) o;
-        if (Float.compare(this.getValue(), other.getValue()) != 0) return false;
-        if (this.getCounter() != other.getCounter()) return false;
+        if (Float.compare(this.getValue(), other.getValue()) != 0) {
+            return false;
+        }
+        if (this.getCounter() != other.getCounter()) {
+            return false;
+        }
         return true;
     }
 

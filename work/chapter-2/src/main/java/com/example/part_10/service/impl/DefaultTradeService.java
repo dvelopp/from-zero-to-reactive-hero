@@ -15,8 +15,6 @@ import com.example.part_10.service.utils.MessageMapper;
 
 public class DefaultTradeService implements TradeService {
 
-    private static final Logger logger = Logger.getLogger("trade-service");
-
     private final Flux<MessageDTO<MessageDTO.Trade>> sharedStream;
 
     public DefaultTradeService(CryptoService service, TradeRepository repository) {
