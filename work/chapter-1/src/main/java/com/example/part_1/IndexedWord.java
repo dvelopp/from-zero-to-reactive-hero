@@ -20,13 +20,21 @@ public class IndexedWord {
     }
 
     public boolean equals(Object o) {
-        if (o == this) return true;
-        if (!(o instanceof IndexedWord)) return false;
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof IndexedWord)) {
+            return false;
+        }
         final IndexedWord other = (IndexedWord) o;
-        if (this.getIndex() != other.getIndex()) return false;
+        if (this.getIndex() != other.getIndex()) {
+            return false;
+        }
         final Object this$word = this.getWord();
         final Object other$word = other.getWord();
-        if (this$word == null ? other$word != null : !this$word.equals(other$word)) return false;
+        if (this$word == null ? other$word != null : !this$word.equals(other$word)) {
+            return false;
+        }
         return true;
     }
 
