@@ -1,6 +1,6 @@
 package com.example.part_1;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 public class IndexedWord {
     private final int index;
@@ -8,7 +8,7 @@ public class IndexedWord {
 
     public IndexedWord(int index, String word) {
         this.index = index;
-        this.word = Objects.requireNonNull(word);
+        this.word = requireNonNull(word);
     }
 
     public int getIndex() {
