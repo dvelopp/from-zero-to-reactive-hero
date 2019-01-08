@@ -21,13 +21,6 @@ public class Part5ResilienceResponsive_Optional {
 
     @Complexity(HARD)
     public static Publisher<Integer> provideSupportOfContinuationWithoutErrorStrategy(Flux<Integer> values, Function<Integer, Integer> mapping) {
-        /*return values.concatMap(e -> {
-            try {
-                return Mono.just(mapping.apply(e));
-            } catch (Exception t) {
-                return Mono.empty();
-            }
-        });*/
         return values.concatMap(e -> Mono.fromSupplier(() -> mapping.apply(e)).onErrorResume(t -> Mono.empty()));
     }
 }
