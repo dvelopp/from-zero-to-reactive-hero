@@ -1,6 +1,6 @@
 package com.example.part_1.part1_extra_store_optional;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 public class Product {
     private final String id;
@@ -8,9 +8,9 @@ public class Product {
     private final long price;
 
     public Product(String id, String name, long price) {
-        this.id = Objects.requireNonNull(id);
-        this.name = Objects.requireNonNull(name);
-        this.price = Objects.requireNonNull(price);
+        this.id = requireNonNull(id);
+        this.name = requireNonNull(name);
+        this.price = requireNonNull(price);
     }
 
     public String getId() {
@@ -27,13 +27,21 @@ public class Product {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Product product = (Product) o;
 
-        if (price != product.price) return false;
-        if (id != null ? !id.equals(product.id) : product.id != null) return false;
+        if (price != product.price) {
+            return false;
+        }
+        if (id != null ? !id.equals(product.id) : product.id != null) {
+            return false;
+        }
         return name != null ? name.equals(product.name) : product.name == null;
     }
 
