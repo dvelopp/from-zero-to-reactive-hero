@@ -1,6 +1,7 @@
 package com.example.part_2.part2_extra_distributed_media_library_optional;
 
 public class Video {
+
 	private final String name;
 	private final String location;
 	private final String description;
@@ -22,4 +23,5 @@ public class Video {
 	public String getName() {
 		return name;
 	}
+
 }

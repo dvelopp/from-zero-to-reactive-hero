@@ -7,6 +7,10 @@ public class IceCreamBall {
         this.type = type;
     }
 
+    public static IceCreamBall ball(String type) {
+        return new IceCreamBall(type);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -24,10 +28,6 @@ public class IceCreamBall {
     @Override
     public int hashCode() {
         return type != null ? type.hashCode() : 0;
-    }
-
-    public static IceCreamBall ball(String type) {
-        return new IceCreamBall(type);
     }
 
     @Override
