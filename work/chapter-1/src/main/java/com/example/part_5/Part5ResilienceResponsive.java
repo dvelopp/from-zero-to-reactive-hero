@@ -42,4 +42,5 @@ public class Part5ResilienceResponsive {
     public static Publisher<String> timeoutLongOperation(Callable<String> longRunningCall) {
         return Mono.fromCallable(longRunningCall).subscribeOn(Schedulers.single()).timeout(Duration.ofSeconds(1), Mono.just("Hello"));
     }
+
 }

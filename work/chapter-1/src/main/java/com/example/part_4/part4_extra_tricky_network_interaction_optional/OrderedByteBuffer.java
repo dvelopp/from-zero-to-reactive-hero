@@ -19,4 +19,5 @@ public class OrderedByteBuffer {
 	public int getWritePosition() {
 		return writePosition;
 	}
+
 }
