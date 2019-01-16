@@ -20,4 +20,5 @@ public class ServiceImpl implements Service {
 				.flatMapMany(IServiceA::sourceA)
 				.concatWith(serviceB.flatMapMany(IServiceB::sourceB));
 	}
+
 }

@@ -9,4 +9,5 @@ public interface IServiceB {
 	static IServiceB instance() {
 		return new ServiceB();
 	}
+
 }

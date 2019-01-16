@@ -16,4 +16,5 @@ public class ServiceA implements IServiceA {
 				.map(i -> "A_" + i)
 				.concatWith(serviceB.flatMapMany(IServiceB::sourceB));
 	}
+
 }
