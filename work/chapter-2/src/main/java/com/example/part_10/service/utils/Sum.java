@@ -57,4 +57,5 @@ public class Sum {
     public String toString() {
         return "Sum(value=" + this.getValue() + ", counter=" + this.getCounter() + ")";
     }
+
 }

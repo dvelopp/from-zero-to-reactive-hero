@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MessageMapper {
+
     public static final String TYPE_KEY = "TYPE";
     public static final String TIMESTAMP_KEY = "TIMESTAMP";
     public static final String PRICE_KEY = "PRICE";
@@ -72,4 +73,5 @@ public class MessageMapper {
         return event.containsKey(TYPE_KEY) &&
                 event.get(TYPE_KEY).equals("0");
     }
+
 }
