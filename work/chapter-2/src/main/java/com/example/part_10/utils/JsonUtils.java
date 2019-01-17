@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import reactor.core.Exceptions;
 
 public class JsonUtils {
+
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public static String writeAsString(Object o) {
@@ -14,4 +15,5 @@ public class JsonUtils {
             throw Exceptions.propagate(e);
         }
     }
+
 }
