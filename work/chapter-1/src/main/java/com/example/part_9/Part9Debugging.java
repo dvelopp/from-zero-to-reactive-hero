@@ -22,6 +22,6 @@ public class Part9Debugging {
                 .expectSubscription()
                 .expectNextCount(1)
                 .verifyComplete();
-
     }
+
 }
