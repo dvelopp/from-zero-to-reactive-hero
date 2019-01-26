@@ -110,11 +110,9 @@ public class Injector {
             T instance;
             if (source.isInterface()) {
                 instance = (T) source.getDeclaredMethod("instance").invoke(source);
-
                 return proxy(instance, source);
             } else {
                 instance = source.newInstance();
-
                 return proxy(instance, source.getInterfaces());
             }
         } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException | InstantiationException e) {
