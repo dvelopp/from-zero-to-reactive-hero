@@ -10,4 +10,5 @@ public class TestStringEventPublisher implements StringEventPublisher {
     public void registerEventListener(Consumer<String> eventListener) {
         this.consumer = eventListener;
     }
+
 }

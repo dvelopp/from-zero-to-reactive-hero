@@ -151,4 +151,5 @@ public class Part2CreationTransformationTerminationTest {
         String element = lastElementFromSource(Flux.just("Hello", "World"));
         Assert.assertEquals("Expected 'World' but was [" + element + "]", "World", element);
     }
+
 }
